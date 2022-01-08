@@ -23,10 +23,17 @@ namespace TesteBackendEnContact.Repository
 
         public async Task<ICompany> SaveAsync(ICompany company)
         {
+            // nesse momento, ele abre um tunel de conexão com o banco de dados
+            // para então salvar os dados.
             using var connection = new SqliteConnection(databaseConfig.ConnectionString);
+
+            // aqui ele chama uma classe que tem a inteligencia para tomar decisões 
+            // referente ao banco de dados
             var dao = new CompanyDao(company);
 
             if (dao.Id == 0)
+            // aqui ele usa o tunel de conexão que ele abriu. e efetivamente vai salvar
+            // se não der nada errado, ou faltar implementação
                 dao.Id = await connection.InsertAsync(dao);
             else
                 await connection.UpdateAsync(dao);

@@ -22,13 +22,24 @@ namespace TesteBackendEnContact.Controllers
         [HttpPost]
         public async Task<ActionResult<ICompany>> Post(SaveCompanyRequest company, [FromServices] ICompanyRepository companyRepository)
         {
+            if(company.Name.Length <=  6)
+            {
+                return NotFound("Dados invalidos");
+            }
+
             return Ok(await companyRepository.SaveAsync(company.ToCompany()));
         }
 
         [HttpDelete]
-        public async Task Delete(int id, [FromServices] ICompanyRepository companyRepository)
+        public async Task<IActionResult> Delete(int id, [FromServices] ICompanyRepository companyRepository)
         {
+            if(id == null)
+            {
+                return BadRequest(new { Message = "Id invalido", Success= false});
+            }
             await companyRepository.DeleteAsync(id);
+
+            return Ok(new { Message = $"o {id} foi excluido com sucesso", Success= false});
         }
 
         [HttpGet]
@@ -42,5 +53,15 @@ namespace TesteBackendEnContact.Controllers
         {
             return await companyRepository.GetAsync(id);
         }
+
+        // aqui eu vou retornar uma string, poderia retornar um int se quisesse
+        // dai do mesmo jeito eu retorno o que eu preciso, tipo se eu quero retornar um company
+        [HttpGet("pegarmeunome")]
+        public string PegarMeuNome(string primeiroNome, string segundoNome)
+        {
+            return primeiroNome + " " + segundoNome;
+        }
+
+        // ai agora eu tenho que retornar um SaveCompany, para não dar erro
     }
 }

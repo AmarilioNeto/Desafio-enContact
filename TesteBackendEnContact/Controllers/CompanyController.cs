@@ -33,13 +33,13 @@ namespace TesteBackendEnContact.Controllers
         [HttpDelete]
         public async Task<IActionResult> Delete(int id, [FromServices] ICompanyRepository companyRepository)
         {
-            if(id == null)
+            if(id == 0)
             {
                 return BadRequest(new { Message = "Id invalido", Success= false});
             }
             await companyRepository.DeleteAsync(id);
 
-            return Ok(new { Message = $"o {id} foi excluido com sucesso", Success= false});
+            return Ok(new { Message = $"o {id} foi excluido com sucesso", Success= true});
         }
 
         [HttpGet]
@@ -53,15 +53,6 @@ namespace TesteBackendEnContact.Controllers
         {
             return await companyRepository.GetAsync(id);
         }
-
-        // aqui eu vou retornar uma string, poderia retornar um int se quisesse
-        // dai do mesmo jeito eu retorno o que eu preciso, tipo se eu quero retornar um company
-        [HttpGet("pegarmeunome")]
-        public string PegarMeuNome(string primeiroNome, string segundoNome)
-        {
-            return primeiroNome + " " + segundoNome;
-        }
-
-        // ai agora eu tenho que retornar um SaveCompany, para não dar erro
+       // ai agora eu tenho que retornar um SaveCompany, para não dar erro
     }
 }

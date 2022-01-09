@@ -10,6 +10,7 @@ using TesteBackendEnContact.Core.Interface.ContactBook.Company;
 using TesteBackendEnContact.Database;
 using TesteBackendEnContact.Repository.Interface;
 
+
 namespace TesteBackendEnContact.Repository
 {
     public class CompanyRepository : ICompanyRepository
@@ -42,22 +43,18 @@ namespace TesteBackendEnContact.Repository
         }
 
         public async Task DeleteAsync(int id)
-        {
+        {         
             using var connection = new SqliteConnection(databaseConfig.ConnectionString);
-            using var transaction = connection.BeginTransaction();
-
             var sql = new StringBuilder();
             sql.AppendLine("DELETE FROM Company WHERE Id = @id;");
-            sql.AppendLine("UPDATE Contact SET CompanyId = null WHERE CompanyId = @id;");
-
-            await connection.ExecuteAsync(sql.ToString(), new { id }, transaction);
+            await connection.ExecuteAsync(sql.ToString(), new { id });       
         }
 
         public async Task<IEnumerable<ICompany>> GetAllAsync()
         {
             using var connection = new SqliteConnection(databaseConfig.ConnectionString);
 
-            var query = "SELECT * FROM Company";
+            var query = "SELECT * FROM Company ";
             var result = await connection.QueryAsync<CompanyDao>(query);
 
             return result?.Select(item => item.Export());
@@ -67,10 +64,10 @@ namespace TesteBackendEnContact.Repository
         {
             using var connection = new SqliteConnection(databaseConfig.ConnectionString);
 
-            var query = "SELECT * FROM Conpany where Id = @id";
-            var result = await connection.QuerySingleOrDefaultAsync<CompanyDao>(query, new { id });
-
-            return result?.Export();
+            var query =  new StringBuilder();
+           query.AppendLine("SELECT * FROM Conpany where Id = @id");
+         var result = await connection.QuerySingleOrDefaultAsync(query.ToString(), new {id});
+           return result?.Export();
         }
     }
 

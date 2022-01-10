@@ -6,4 +6,5 @@
         int ContactBookId { get; }
         string Name { get; }
     }
+    
 }

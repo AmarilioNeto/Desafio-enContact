@@ -50,7 +50,7 @@ namespace TesteBackendEnContact.Controllers
 
         [HttpGet("{id}")]
         public async Task<ICompany> Get(int id, [FromServices] ICompanyRepository companyRepository)
-        {
+        {        
             return await companyRepository.GetAsync(id);
         }
        // ai agora eu tenho que retornar um SaveCompany, para não dar erro

@@ -2,9 +2,10 @@
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TesteBackendEnContact.Core.Domain.ContactBook;
+using TesteBackendEnContact.Controllers.Models;
 using TesteBackendEnContact.Core.Interface.ContactBook;
 using TesteBackendEnContact.Repository.Interface;
+
 
 namespace TesteBackendEnContact.Controllers
 {
@@ -20,9 +21,14 @@ namespace TesteBackendEnContact.Controllers
         }
 
         [HttpPost]
-        public async Task<IContactBook> Post(ContactBook contactBook, [FromServices] IContactBookRepository contactBookRepository)
+        public async Task<IContactBook> Post(SaveContactBookRequest contactbook, [FromServices] IContactBookRepository contactBookRepository)
         {
-            return await contactBookRepository.SaveAsync(contactBook);
+
+           /*if(contactbook.Name == null)
+            {
+               // return NotFound("voce deve inserir um nome de contato");
+            }*/
+            return await contactBookRepository.SaveAsync(contactbook.ToContactBook());
         }
 
         [HttpDelete]
